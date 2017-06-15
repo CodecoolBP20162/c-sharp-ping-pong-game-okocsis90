@@ -29,41 +29,25 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.player = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.ball = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.scoreLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.levelLabel = new System.Windows.Forms.Label();
             this.levelProgress = new System.Windows.Forms.ProgressBar();
-            ((System.ComponentModel.ISupportInitialize)(this.player)).BeginInit();
+            this.ball = new System.Windows.Forms.PictureBox();
+            this.player = new System.Windows.Forms.PictureBox();
+            this.gift = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.ball)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gift)).BeginInit();
             this.SuspendLayout();
-            // 
-            // player
-            // 
-            this.player.BackColor = System.Drawing.SystemColors.GrayText;
-            this.player.Location = new System.Drawing.Point(75, 353);
-            this.player.Name = "player";
-            this.player.Size = new System.Drawing.Size(123, 15);
-            this.player.TabIndex = 0;
-            this.player.TabStop = false;
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 50;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // ball
-            // 
-            this.ball.BackColor = System.Drawing.SystemColors.GrayText;
-            this.ball.Location = new System.Drawing.Point(287, 182);
-            this.ball.Name = "ball";
-            this.ball.Size = new System.Drawing.Size(10, 10);
-            this.ball.TabIndex = 1;
-            this.ball.TabStop = false;
+            this.timer1.Interval = 30;
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // label1
             // 
@@ -108,11 +92,40 @@
             this.levelProgress.Size = new System.Drawing.Size(100, 23);
             this.levelProgress.TabIndex = 6;
             // 
+            // ball
+            // 
+            this.ball.BackColor = System.Drawing.SystemColors.GrayText;
+            this.ball.Location = new System.Drawing.Point(287, 182);
+            this.ball.Name = "ball";
+            this.ball.Size = new System.Drawing.Size(12, 13);
+            this.ball.TabIndex = 1;
+            this.ball.TabStop = false;
+            // 
+            // player
+            // 
+            this.player.BackColor = System.Drawing.SystemColors.GrayText;
+            this.player.Location = new System.Drawing.Point(228, 375);
+            this.player.Name = "player";
+            this.player.Size = new System.Drawing.Size(123, 15);
+            this.player.TabIndex = 0;
+            this.player.TabStop = false;
+            // 
+            // gift
+            // 
+            this.gift.Image = global::PingPongGame.Properties.Resources.gift;
+            this.gift.Location = new System.Drawing.Point(384, 13);
+            this.gift.Name = "gift";
+            this.gift.Size = new System.Drawing.Size(40, 39);
+            this.gift.TabIndex = 7;
+            this.gift.TabStop = false;
+            this.gift.Visible = false;
+            // 
             // Board
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(557, 420);
+            this.Controls.Add(this.gift);
             this.Controls.Add(this.levelProgress);
             this.Controls.Add(this.levelLabel);
             this.Controls.Add(this.label2);
@@ -125,8 +138,9 @@
             this.Load += new System.EventHandler(this.Board_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Board_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Board_KeyUp);
-            ((System.ComponentModel.ISupportInitialize)(this.player)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ball)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gift)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,6 +156,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label levelLabel;
         private System.Windows.Forms.ProgressBar levelProgress;
+        private System.Windows.Forms.PictureBox gift;
     }
 }
 

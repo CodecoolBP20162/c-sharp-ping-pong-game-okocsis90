@@ -21,7 +21,7 @@ namespace PingPongGame
 
         private int score;
         private int level = 1;
-        private int levelChange = 2;
+        private int levelChange = 3;
 
         private bool pause;
 
@@ -50,7 +50,7 @@ namespace PingPongGame
             else if (e.KeyCode == Keys.Escape)
             {
                 Close();
-            }
+            }       
             else if (e.KeyCode == Keys.Space)
             {
                 if (!pause)
@@ -77,44 +77,138 @@ namespace PingPongGame
             }
         }
 
-
-        private void timer1_Tick(object sender, EventArgs e)
+        private void InitializeBall()
         {
+            pause = true;
+            ball.Location = new Point(Width / 2, Height / 2);
+        }
 
+        private void LoseCurrentMatch()
+        {
+            InitializeBall();
+            MessageBox.Show("Your score was: " + score);
+            score = 0;
+            scoreLabel.Text = score.ToString();
+        }
+
+        private void BallTouchesPlayer()
+        {
+            ballVelY *= -1;
+            score += 1;
+            scoreLabel.Text = score.ToString();
+        }
+
+        private void ShowLevelInformation()
+        {
+            if (level < 10)
+            {
+                MessageBox.Show("LEVEL UP");
+            }
+        }
+
+        private void ShowIfWon()
+        {
+            if (level == 10)
+            {
+                MessageBox.Show("You won");
+                Close();
+            }
+        }
+
+        private void MakeMoreDifficult()
+        {
+            if (level > 5)
+            {
+                player.Width -= 10;
+            }
+            else
+            {
+                if (ballVelX < 0)
+                {
+                    ballVelX -= 2;
+                }
+                else
+                {
+                    ballVelX += 2;
+                }
+                ballVelY -= 2;
+            }
+        }
+
+        private void PrepareGift()
+        {
+            if (level == 5)
+            {
+                gift.Visible = true;
+            } else if (level == 6)
+            {
+                gift.Visible = false;
+            }
+            
+        }
+
+        private void LevelGoesUp()
+        {
+            levelProgress.Value = 100;
+            InitializeBall();
+            level += 1;
+            levelLabel.Text = level.ToString();
+            ShowLevelInformation();
+            ShowIfWon();
+            levelProgress.Value = 0;
+            MakeMoreDifficult();
+            PrepareGift();
+
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
             if (!pause)
             {
                 ball.Location = new Point(ball.Location.X + ballVelX, ball.Location.Y + ballVelY);
                 player.Location = new Point(player.Location.X + playerVelX, player.Location.Y);
+                if (gift.Visible)
+                {
+                    gift.Location = new Point(gift.Location.X, gift.Location.Y + 5);
+                }
+            }
+
+            if (player.Bounds.IntersectsWith(gift.Bounds))
+            {
+                player.Width += 20;
+                gift.Location = new Point(0, 0);
+                gift.Visible = false;
+            }
+
+            if (gift.Location.Y + gift.Height >= Height)
+            {
+                gift.Location = new Point(0, 0);
+                gift.Visible = false;
+            }
+
+            if (player.Bounds.IntersectsWith(ball.Bounds))
+            {
+                BallTouchesPlayer();
+                if (score % levelChange == 0)
+                {
+                    LevelGoesUp();
+                }
+                else
+                {
+                    try
+                    {
+                        levelProgress.Value += 100 / levelChange;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        levelProgress.Value = 100;
+                    }
+                }
             }
 
             if (ball.Location.Y + ball.Height >= Size.Height)
             {
-                pause = true;
-                ball.Location = new Point(Width / 2, Height / 2);
-                MessageBox.Show("Your score was: " + score);
-                score = 0;
-                scoreLabel.Text = score.ToString();
-            }
-
-            if (ball.Location.X + ball.Width >= player.Location.X &&
-                ball.Location.X < player.Location.X + player.Width &&
-                ball.Location.Y + ball.Height >= player.Location.Y &&
-                ball.Location.Y + ball.Height < player.Location.Y + 2)
-            {
-                ballVelY *= -1;
-                score += 1;
-                scoreLabel.Text = score.ToString();
-                levelProgress.Value += 100/levelChange;
-
-                if (score % levelChange == 0)
-                {
-                    pause = true;
-                    ball.Location = new Point(Width / 2, Height / 2);
-                    MessageBox.Show("LEVEL UP");
-                    level += 1;
-                    levelLabel.Text = level.ToString();
-                    levelProgress.Value = 0;
-                }
+                LoseCurrentMatch();
             }
 
             if (ball.Location.Y <= 0)
